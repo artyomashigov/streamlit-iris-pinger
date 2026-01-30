@@ -2,14 +2,15 @@ name: ping streamlit app
 
 on:
   schedule:
-    - cron: "0 */6 * * *"  # every 6 hours (utc)
+    - cron: "0 */6 * * *"
   workflow_dispatch:
 
 jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - name: ping iris model app
+      - name: ping
         run: |
-          # ping the app to keep it awake
-          curl -L --fail --silent --show-error "https://iris-model-aa.streamlit.app/" > /dev/null
+          curl -sS --fail --retry 3 --retry-delay 10 \
+            -H "User-Agent: Mozilla/5.0" \
+            "https://iris-model-aa.streamlit.app/" > /dev/null
